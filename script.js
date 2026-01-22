@@ -160,6 +160,59 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+    // --- Process Section Auto-Carousel (Mobile) ---
+    const processContainer = document.querySelector('.process-container');
+    let autoScrollInterval;
+
+    function initProcessCarousel() {
+        if (!processContainer || window.innerWidth > 768) {
+            if (autoScrollInterval) clearInterval(autoScrollInterval);
+            return;
+        }
+
+        // Clone items for infinite loop
+        const items = Array.from(processContainer.children);
+        if (items.length < 2) return;
+
+        // Only clone if not already cloned
+        if (!processContainer.querySelector('.cloned')) {
+            items.forEach(item => {
+                const clone = item.cloneNode(true);
+                clone.classList.add('cloned');
+                processContainer.appendChild(clone);
+            });
+        }
+
+        let scrollAmount = 0;
+        const step = 1; // Pixels per interval
+        const delay = 30; // ms
+
+        function startAutoScroll() {
+            if (autoScrollInterval) clearInterval(autoScrollInterval);
+            autoScrollInterval = setInterval(() => {
+                processContainer.scrollLeft += step;
+
+                // If reached the end of original items, reset to start
+                const firstItemWidth = items[0].offsetWidth + 20; // width + gap
+                const totalOriginalWidth = firstItemWidth * items.length;
+
+                if (processContainer.scrollLeft >= totalOriginalWidth) {
+                    processContainer.scrollLeft = 0;
+                }
+            }, delay);
+        }
+
+        startAutoScroll();
+
+        // Pause on touch
+        processContainer.addEventListener('touchstart', () => clearInterval(autoScrollInterval));
+        processContainer.addEventListener('touchend', startAutoScroll);
+    }
+
+    // Initialize and handle resize
+    initProcessCarousel();
+    window.addEventListener('resize', initProcessCarousel);
+
     // --- Google Drive Video Auto-Fixer ---
     function fixGoogleDriveVideoLinks() {
         // Target all video elements

@@ -1372,34 +1372,60 @@ h3 {
 }
 
 @media (max-width: 768px) {
+    .process-container {
+        padding-left: 0;
+        display: flex;
+        overflow-x: auto;
+        gap: 20px;
+        padding-bottom: 20px;
+        -webkit-overflow-scrolling: touch;
+        margin-top: 30px;
+        scrollbar-width: none;
+        /* Hide for Firefox */
+    }
+
+    .process-container::-webkit-scrollbar {
+        display: none;
+        /* Hide for Chrome/Safari/Edge */
+    }
+
+    .process-container::before {
+        display: none;
+        /* Hide vertical line on horizontal mobile scroll */
+    }
+
+    .process-step {
+        flex: 0 0 calc(100% - 40px);
+        min-width: 280px;
+        scroll-snap-align: center;
+        margin-bottom: 0;
+        flex-direction: column;
+        padding: 0 10px;
+    }
+
+    .step-marker {
+        position: relative;
+        left: 0;
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+        justify-content: flex-start;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+
     .step-card {
         flex-direction: column;
+        height: 100%;
     }
 
     .step-image {
         width: 100%;
         height: 180px;
-    }
-}
-
-@media (max-width: 480px) {
-    .process-container {
-        padding-left: 45px;
-    }
-
-    .process-container::before {
-        left: 20px;
-    }
-
-    .step-marker {
-        left: -45px;
-        width: 45px;
-    }
-
-    .step-number {
-        width: 35px;
-        height: 35px;
-        font-size: 1rem;
     }
 
     .step-content {
@@ -1408,6 +1434,31 @@ h3 {
 
     .step-content h3 {
         font-size: 1.2rem;
+    }
+
+    /* Hide scrollbar but keep functionality or style it subtly */
+    .process-container::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .process-container::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    .process-container::-webkit-scrollbar-thumb {
+        background: var(--accent-color);
+        border-radius: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .process-step {
+        flex: 0 0 calc(100% - 60px);
+        min-width: 260px;
+    }
+
+    .step-content {
+        padding: 15px;
     }
 }
 
