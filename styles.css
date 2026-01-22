@@ -714,53 +714,147 @@ h3 {
 }
 
 .portfolio-section {
-    padding: 50px 5%;
+    padding: 80px 5%;
     background-color: #f9f9f9;
 }
 
-/* Filters */
+/* Portfolio Grid */
+.masonry-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin-top: 50px;
+}
+
+/* Portfolio Filters */
 .portfolio-filters {
-    text-align: center;
-    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 50px;
+    padding: 10px 0;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .filter-btn {
     background: transparent;
-    border: none;
-    padding: 10px 20px;
-    margin: 0 10px;
-    font-family: var(--font-body);
-    font-size: 1rem;
-    cursor: pointer;
+    border: 1px solid transparent;
+    padding: 10px 24px;
+    font-family: var(--font-heading);
+    /* Professional serif font */
+    font-size: 0.85rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #777;
-    transition: all 0.3s;
-    border-bottom: 2px solid transparent;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    border-radius: 40px;
+    /* Pill shape */
 }
 
-.filter-btn:hover,
-.filter-btn.active {
+.filter-btn:hover {
     color: var(--primary-color);
-    border-bottom: 2px solid var(--accent-color);
+    background: rgba(197, 160, 101, 0.05);
+    /* Very subtle gold tint */
 }
 
-/* Masonry Grid */
+.filter-btn.active {
+    color: #fff;
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 15px rgba(197, 160, 101, 0.2);
+}
+
+.filter-btn::after {
+    display: none;
+    /* Removing old underline style */
+}
+
+.portfolio-item {
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #eee;
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    aspect-ratio: 1 / 1;
+    /* Keeping images square and small */
+}
+
+.portfolio-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.portfolio-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-premium);
+    z-index: 10;
+}
+
+.portfolio-item:hover img {
+    transform: scale(1.1);
+}
+
+.portfolio-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(26, 26, 26, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    text-align: center;
+    padding: 20px;
+}
+
+.portfolio-item:hover .portfolio-overlay {
+    opacity: 1;
+}
+
+.portfolio-overlay h3 {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    transform: translateY(20px);
+    transition: transform 0.4s ease;
+}
+
+.portfolio-overlay p {
+    color: #fff;
+    font-size: 0.9rem;
+    transform: translateY(20px);
+    transition: transform 0.4s ease 0.1s;
+}
+
+.portfolio-item:hover .portfolio-overlay h3,
+.portfolio-item:hover .portfolio-overlay p {
+    transform: translateY(0);
+}
+
 @media (max-width: 1024px) {
     .masonry-grid {
-        column-count: 3;
-        column-gap: 20px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
     }
 }
 
 @media (max-width: 768px) {
     .masonry-grid {
-        column-count: 2;
-        column-gap: 15px;
-    }
-
-    .portfolio-item {
-        margin-bottom: 20px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
     }
 
     .portfolio-filters {
@@ -783,10 +877,9 @@ h3 {
 
 @media (max-width: 480px) {
     .masonry-grid {
-        column-count: 2;
-        /* Changed to 2x2 for mobile as requested */
-        column-gap: 10px;
-        /* Tighter gap for mobile */
+        grid-template-columns: repeat(2, 1fr);
+        /* 2x2 for mobile */
+        gap: 10px;
     }
 
     .page-header h1 {
@@ -1107,147 +1200,196 @@ h3 {
 
 
 
-/* --- Process Section (Dream Temple) - Horizontal Card Layout --- */
+/* --- Process Section (Dream Temple) - Vertical Timeline Layout --- */
 .process-section {
     padding: 100px 5%;
     background-color: var(--secondary-color);
-    /* Light background for contrast */
     text-align: center;
 }
 
 .process-container {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
-    /* Allows wrapping on medium screens */
-    max-width: 1400px;
-    margin: 0 auto;
+    max-width: 900px;
+    margin: 50px auto 0;
     position: relative;
+    padding-left: 100px;
+    /* Space for the timeline line */
+    text-align: left;
 }
 
-/* Hide vertical line from previous design */
+/* The vertical connecting line */
 .process-container::before {
-    display: none;
+    content: '';
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 40px;
+    width: 2px;
+    background: repeating-linear-gradient(to bottom,
+            var(--accent-color),
+            var(--accent-color) 10px,
+            transparent 10px,
+            transparent 20px);
+    display: block;
 }
 
 .process-step {
-    flex: 1;
-    min-width: 200px;
-    max-width: 250px;
+    position: relative;
+    margin-bottom: 60px;
     display: flex;
-    flex-direction: column;
+    align-items: flex-start;
+}
+
+.process-step:last-child {
+    margin-bottom: 0;
+}
+
+/* Step Marker (Circle on the line) */
+.step-marker {
+    position: absolute;
+    left: -100px;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
     align-items: center;
+}
+
+.step-number {
+    position: relative;
+    z-index: 2;
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    background: var(--secondary-color);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--accent-color);
+    border-radius: 50%;
+    margin: 0;
+    opacity: 1;
+    /* Resetting previous opacity */
+}
+
+/* Step Card Layout */
+.step-card {
     background: #fff;
-    padding: 0;
-    margin-bottom: 30px;
+    display: flex;
+    width: 100%;
+    box-shadow: var(--shadow-soft);
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-    /* Premium soft shadow */
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: var(--transition);
     border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.process-step:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
-    /* Layered shadow */
+.process-step:hover .step-card {
+    transform: translateX(10px);
+    box-shadow: var(--shadow-premium);
     border-color: var(--accent-color);
-    /* Gold border on hover */
-}
-
-/* Reset Reset Reverse Logic */
-.process-step.reverse {
-    flex-direction: column;
 }
 
 .step-image {
-    width: 100%;
-    height: 180px;
-    /* Fixed height for uniformity */
-    order: 1;
-    overflow: hidden;
-    /* Ensure zoom stays contained */
+    width: 200px;
+    /* Fixed width for vertical layout */
+    height: auto;
+    min-height: 150px;
+    flex-shrink: 0;
 }
 
 .step-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 0;
     transition: transform 0.6s ease;
-    /* Smooth zoom */
 }
 
 .process-step:hover .step-image img {
     transform: scale(1.1);
-    /* Zoom effect */
 }
 
 .step-content {
-    width: 100%;
-    padding: 25px 20px;
-    text-align: center;
-    order: 2;
-    /* Content below image */
-    background: #fff;
-}
-
-.step-number {
-    display: block;
-    position: relative;
-    font-size: 2.5rem;
-    color: var(--accent-color);
-    margin-bottom: 10px;
-    opacity: 0.3;
-    width: auto;
-    top: auto;
-    right: auto;
-    left: auto;
-    z-index: 1;
+    padding: 30px;
+    flex: 1;
 }
 
 .step-content h3 {
-    font-size: 1.1rem;
-    margin: 0 0 10px;
+    font-size: 1.4rem;
     color: var(--primary-color);
-    min-height: 48px;
-    /* Alignment for varying title lengths */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin-bottom: 15px;
+    min-height: auto;
+    justify-content: flex-start;
+    text-align: left;
 }
 
 .step-content p {
-    font-size: 0.9rem;
-    color: #777;
-    margin-bottom: 0;
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
 }
 
 /* Responsive - Process */
-@media (max-width: 1100px) {
+@media (max-width: 900px) {
     .process-container {
-        justify-content: center;
+        padding-left: 60px;
     }
 
-    .process-step {
-        max-width: 45%;
-        /* 2 per row */
-        min-width: 300px;
+    .process-container::before {
+        left: 30px;
+    }
+
+    .step-marker {
+        left: -60px;
+        width: 60px;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
     }
 }
 
-@media (max-width: 600px) {
-    .process-step {
-        max-width: 100%;
-        /* Stack on mobile */
-        min-width: 100%;
+@media (max-width: 768px) {
+    .step-card {
         flex-direction: column;
     }
 
     .step-image {
-        height: 200px;
+        width: 100%;
+        height: 180px;
+    }
+}
+
+@media (max-width: 480px) {
+    .process-container {
+        padding-left: 45px;
+    }
+
+    .process-container::before {
+        left: 20px;
+    }
+
+    .step-marker {
+        left: -45px;
+        width: 45px;
+    }
+
+    .step-number {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+
+    .step-content {
+        padding: 20px;
+    }
+
+    .step-content h3 {
+        font-size: 1.2rem;
     }
 }
 
