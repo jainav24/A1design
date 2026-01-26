@@ -268,4 +268,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Run the fixer
     fixGoogleDriveVideoLinks();
+
+    // --- Scroll Animation Observer ---
+    const observerOptions = {
+        threshold: 0.1, // Trigger when 10% visible
+        rootMargin: "0px 0px -50px 0px" // Trigger slightly before element is fully in view
+    };
+
+    const scrollObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target); // Run once
+            }
+        });
+    }, observerOptions);
+
+    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+    animatedElements.forEach(el => scrollObserver.observe(el));
 });
