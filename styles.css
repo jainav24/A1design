@@ -2042,41 +2042,73 @@ html {
 }
 
 .product-card {
-    background: #fff;
-    border: 1px solid #eee;
+    position: relative;
+    height: 400px;
+    /* Fixed height for poster look */
     border-radius: 8px;
-    /* Slight rounding for modern feel */
     overflow: hidden;
-    transition: all 0.3s ease;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
 }
 
 .product-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    border-color: var(--accent-color);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
 
-.card-image {
-    height: 250px;
-    overflow: hidden;
-    position: relative;
-}
-
-.card-image img {
+.card-bg {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.6s ease;
 }
 
-.product-card:hover .card-image img {
+.product-card:hover .card-bg {
     transform: scale(1.1);
 }
 
-.card-content {
+.card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 10%, rgba(0, 0, 0, 0.6) 50%, transparent 100%);
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    /* Center content */
+    z-index: 2;
+    min-height: 150px;
+}
+
+.card-overlay h3 {
+    color: #fff;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
     text-align: center;
+    font-family: var(--font-heading);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.card-overlay .btn-whatsapp {
+    width: 100%;
+    padding: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background-color: #25D366;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.card-overlay .btn-whatsapp:hover {
+    background-color: #128C7E;
 }
 
 .card-content h3 {
@@ -2096,11 +2128,15 @@ html {
 /* --- Responsiveness --- */
 
 /* Tablet (max-width: 1024px) */
+/* Tablet (max-width: 1024px) */
 @media (max-width: 1024px) {
     .product-grid {
         grid-template-columns: repeat(3, 1fr);
-        /* 3 columns */
         gap: 20px;
+    }
+
+    .product-card {
+        height: 350px;
     }
 }
 
@@ -2108,20 +2144,19 @@ html {
 @media (max-width: 768px) {
     .product-grid {
         grid-template-columns: repeat(2, 1fr);
-        /* 2 columns */
         gap: 15px;
     }
 
-    .card-image {
-        height: 200px;
-        /* Smaller image height */
+    .product-card {
+        height: 280px;
     }
 
-    .card-content {
+    .card-overlay {
         padding: 15px;
+        min-height: auto;
     }
 
-    .card-content h3 {
+    .card-overlay h3 {
         font-size: 1.1rem;
     }
 }
@@ -2129,36 +2164,39 @@ html {
 /* Mobile (max-width: 480px) */
 @media (max-width: 480px) {
     .product-grid {
-        grid-template-columns: repeat(2, 1fr);
-        /* Strictly 2 columns as requested */
         gap: 10px;
-        /* Tighter gap for small screens */
     }
 
-    .card-image {
-        height: 150px;
-        /* Even smaller image height for 2-col layout */
+    .product-card {
+        height: 220px;
     }
 
-    .card-content {
+    /* Touch Interaction - Zoom on active/focus */
+    .product-card:active .card-bg,
+    .product-card:focus .card-bg {
+        transform: scale(1.1);
+    }
+
+    /* Ensure hover state also works if supported */
+    .product-card:hover .card-bg {
+        transform: scale(1.1);
+    }
+
+    .card-overlay {
         padding: 10px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 20%, rgba(0, 0, 0, 0.5) 70%, transparent 100%);
     }
 
-    .card-content h3 {
+    .card-overlay h3 {
         font-size: 0.9rem;
-        /* Smaller text to fit */
-        margin-bottom: 5px;
+        margin-bottom: 8px;
+        line-height: 1.2;
     }
 
-    .card-content p {
-        font-size: 0.8rem;
-        display: none;
-        /* Hide description on very small screens to save space */
-    }
-
-    .btn-sm {
+    .card-overlay .btn-whatsapp {
         padding: 8px 5px;
-        font-size: 0.7rem;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
     }
 }
 
