@@ -469,14 +469,14 @@ h3 {
 .collection-item {
     position: relative;
     overflow: hidden;
-    background: #fff;
-    border: 1px solid #eee;
-    transition: all 0.5s ease;
+    border-radius: 4px;
+    box-shadow: var(--shadow-soft);
 }
 
 .collection-image {
     position: relative;
-    height: 350px;
+    height: 450px;
+    /* Taller for better visual */
     overflow: hidden;
 }
 
@@ -487,7 +487,7 @@ h3 {
     transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* Hover Effect */
+/* Hover Effect: Image Zoom */
 .collection-item:hover .collection-image img {
     transform: scale(1.1);
 }
@@ -498,55 +498,68 @@ h3 {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3);
-    /* Subtle darken on idle, or just on hover? Let's hide overlay content first */
+    background: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent dark overlay */
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    padding: 20px;
     opacity: 0;
     transition: opacity 0.4s ease;
+    backdrop-filter: blur(2px);
+    /* Premium feel */
 }
 
 .collection-item:hover .collection-overlay {
     opacity: 1;
 }
 
+.overlay-content {
+    color: #fff;
+    transform: translateY(20px);
+    transition: transform 0.5s ease-out;
+}
+
+.collection-item:hover .overlay-content {
+    transform: translateY(0);
+}
+
+.overlay-content h3 {
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.overlay-content p {
+    font-size: 1rem;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
 .btn-view {
-    padding: 12px 30px;
-    border: 1px solid #fff;
+    padding: 12px 35px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.1);
     color: #fff;
     text-decoration: none;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-size: 0.85rem;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+    font-weight: 600;
     transition: all 0.3s;
+    display: inline-block;
 }
 
 .btn-view:hover {
     background: #fff;
     color: #000;
-}
-
-.collection-info {
-    padding: 25px;
-    text-align: center;
-    background: #fff;
-    position: relative;
-    z-index: 2;
-}
-
-.collection-info h3 {
-    font-size: 1.6rem;
-    margin-bottom: 8px;
-    color: var(--primary-color);
-    font-weight: 600;
-}
-
-.collection-info p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    border-color: #fff;
 }
 
 /* Responsive */
@@ -644,24 +657,52 @@ h3 {
 
     /* .collection-item removed empty rule */
 
-    .collection-info {
-        padding: 10px;
-        /* Tighter padding for 2-col */
+    .collection-overlay {
+        opacity: 1;
+        /* Always visible on mobile */
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+        align-items: flex-end;
+        /* Align text to bottom */
+        padding-bottom: 25px;
+        /* Space from bottom */
+        backdrop-filter: none;
+        /* Clearer image view */
     }
 
-    .collection-info h3 {
-        font-size: 1.1rem;
-        /* Smaller heading */
-        margin-bottom: 4px;
+    .overlay-content {
+        transform: translateY(0);
+        /* Reset animation position */
+        width: 100%;
+        text-align: left;
+        /* Cleaner look for bottom align */
+        padding-left: 15px;
     }
 
-    .collection-info p {
+    .overlay-content h3 {
+        font-size: 1.3rem;
+        margin-bottom: 2px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .overlay-content p {
+        font-size: 0.85rem;
+        margin-bottom: 12px;
+        font-weight: 400;
+        opacity: 0.9;
+    }
+
+    .btn-view {
+        padding: 8px 20px;
         font-size: 0.75rem;
+        background: #fff;
+        color: #000;
+        border: none;
+        margin-top: 5px;
     }
 
     .collection-image {
-        height: 180px;
-        /* Reduced height */
+        height: 300px;
+        /* Taller to show off the stone patterns */
     }
 
     .section-header h2 {
@@ -1140,40 +1181,67 @@ h3 {
 }
 
 .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 40px;
+    display: flex;
+    justify-content: space-between;
+    gap: 0;
+    /* Removing gap to let line connect smoothly, margin will handle spacing */
     max-width: 1400px;
-    margin: 0 auto;
-    margin-top: 60px;
+    margin: 60px auto 0;
+    position: relative;
+    padding: 0 20px;
+}
+
+/* Connecting Line (Desktop: Horizontal) */
+.features-grid::before {
+    content: '';
+    position: absolute;
+    top: 80px;
+    /* Center of icon (40px padding + 40px icon center) */
+    left: 100px;
+    /* Start after first card center */
+    right: 100px;
+    /* End before last card center */
+    height: 3px;
+    background: var(--accent-color);
+    z-index: 0;
+    opacity: 0.3;
 }
 
 .feature-item {
-    background: #fff;
-    padding: 40px 30px;
+    background: transparent;
+    /* Transparent to let line pass? No, maintain card look */
+    /* actually, user wants "connected". If cards are boxes, line is weird. 
+       Let's make them look connected by removing the box border and just having the icon connected */
+    flex: 1;
+    padding: 40px 20px;
     transition: all 0.3s ease;
-    border: 1px solid #eee;
+    border: none;
+    /* Removing border for cleaner connected look */
     position: relative;
-    overflow: hidden;
+    z-index: 1;
 }
 
 .feature-item:hover {
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-    transform: translateY(-5px);
-    border-color: var(--accent-color);
+    transform: translateY(-10px);
 }
 
 .feature-icon {
     width: 80px;
     height: 80px;
     margin: 0 auto 25px;
-    background: var(--secondary-color);
+    background: #fff;
+    /* White bg for icon to hide the line crossing it */
+    border: 3px solid var(--secondary-color);
+    /* Border matches line area */
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--primary-color);
     transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+    /* On top of line */
 }
 
 .feature-item:hover .feature-icon {
@@ -1459,6 +1527,38 @@ h3 {
 
     .step-content {
         padding: 15px;
+    }
+}
+
+/* Mobile - Connected Vertical Features */
+@media (max-width: 768px) {
+    .features-grid {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 40px;
+    }
+
+    /* Vertical Line */
+    .features-grid::before {
+        top: 60px;
+        /* Start below first icon top */
+        bottom: 60px;
+        /* End before last icon bottom */
+        left: 50%;
+        width: 3px;
+        height: auto;
+        transform: translateX(-50%);
+        right: auto;
+    }
+
+    .feature-item {
+        width: 100%;
+        padding: 30px 20px;
+    }
+
+    .feature-item:hover {
+        transform: none;
+        /* No lift on mobile */
     }
 }
 
